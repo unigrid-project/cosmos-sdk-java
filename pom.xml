@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.jeongen.cosmos</groupId>
+    <groupId>org.unigrid.cosmos</groupId>
     <artifactId>sdk</artifactId>
-    <version>0.0.5</version>
+    <version>0.0.6</version>
 
     <name>cosmos-sdk-java</name>
-    <url>https://github.com/cloverzrg/cosmos-sdk-java</url>
+    <url>https://github.com/unigrid-project/cosmos-sdk-java</url>
     <description>The SDK integrates and implement all the functions required by the exchange to access Cosmos (ATOM)</description>
     <developers>
         <developer>
@@ -21,11 +21,11 @@
     <licenses>
         <license>
             <name>Apache License</name>
-            <url>https://github.com/cloverzrg/cosmos-sdk-java/blob/main/LICENSE</url>
+            <url>https://github.com/unigrid-project/cosmos-sdk-java/blob/main/LICENSE</url>
         </license>
     </licenses>
     <scm>
-        <url>https://github.com/cloverzrg/cosmos-sdk-java.git</url>
+        <url>https://github.com/unigrid-project/cosmos-sdk-java.git</url>
     </scm>
 
     <dependencies>

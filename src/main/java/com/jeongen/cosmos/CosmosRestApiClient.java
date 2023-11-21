@@ -18,6 +18,8 @@ import cosmos.crypto.secp256k1.Keys;
 import cosmos.tx.signing.v1beta1.Signing;
 import cosmos.tx.v1beta1.ServiceOuterClass;
 import cosmos.tx.v1beta1.TxOuterClass;
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
 import io.netty.util.internal.StringUtil;
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
@@ -26,6 +28,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.web3j.crypto.ECKeyPair;
 import org.web3j.crypto.Sign;
+
+import unigrid.gridnode.MsgGrpc;
+import unigrid.gridnode.Tx.MsgGridnodeDelegate;
+import unigrid.gridnode.Tx.MsgGridnodeDelegateResponse;
+import unigrid.gridnode.Tx.MsgGridnodeUndelegate;
+import unigrid.gridnode.Tx.MsgGridnodeUndelegateResponse;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -61,9 +69,20 @@ public class CosmosRestApiClient {
         this.chainId = chainId;
     }
 
+    private ManagedChannel createChannel(String host, int port) {
+        return ManagedChannelBuilder.forAddress(host, port)
+                .usePlaintext()
+                .build();
+    }
+
+    private MsgGrpc.MsgBlockingStub createStub(ManagedChannel channel) {
+        return MsgGrpc.newBlockingStub(channel);
+    }
+
     public BigDecimal getBalanceInAtom(String address) throws Exception {
         String path = String.format("/cosmos/bank/v1beta1/balances/%s", address);
-        QueryOuterClass.QueryAllBalancesResponse balanceResponse = client.get(path, QueryOuterClass.QueryAllBalancesResponse.class);
+        QueryOuterClass.QueryAllBalancesResponse balanceResponse = client.get(path,
+                QueryOuterClass.QueryAllBalancesResponse.class);
         if (balanceResponse.getBalancesCount() >= 1) {
             List<CoinOuterClass.Coin> balancesList = balanceResponse.getBalancesList();
             for (int i = 0; i < balancesList.size(); i++) {
@@ -98,7 +117,8 @@ public class CosmosRestApiClient {
         queryMap.put("events", "tx.height=" + height);
         queryMap.put("events", "message.module='bank'");
         queryMap.put("pagination.key", nextKey);
-        ServiceOuterClass.GetTxsEventResponse eventResponse = client.get("/cosmos/tx/v1beta1/txs", queryMap, ServiceOuterClass.GetTxsEventResponse.class);
+        ServiceOuterClass.GetTxsEventResponse eventResponse = client.get("/cosmos/tx/v1beta1/txs", queryMap,
+                ServiceOuterClass.GetTxsEventResponse.class);
         return eventResponse;
     }
 
@@ -118,7 +138,8 @@ public class CosmosRestApiClient {
 
     public ServiceOuterClass.SimulateResponse simulate(ServiceOuterClass.SimulateRequest req) throws Exception {
         String reqBody = printer.print(req);
-        ServiceOuterClass.SimulateResponse simulateResponse = client.post("/cosmos/tx/v1beta1/simulate", reqBody, ServiceOuterClass.SimulateResponse.class);
+        ServiceOuterClass.SimulateResponse simulateResponse = client.post("/cosmos/tx/v1beta1/simulate", reqBody,
+                ServiceOuterClass.SimulateResponse.class);
         return simulateResponse;
     }
 
@@ -137,9 +158,11 @@ public class CosmosRestApiClient {
         throw new RuntimeException("account not found:" + address);
     }
 
-    public ServiceOuterClass.BroadcastTxResponse broadcastTx(ServiceOuterClass.BroadcastTxRequest req) throws Exception {
+    public ServiceOuterClass.BroadcastTxResponse broadcastTx(ServiceOuterClass.BroadcastTxRequest req)
+            throws Exception {
         String reqBody = printer.print(req);
-        ServiceOuterClass.BroadcastTxResponse broadcastTxResponse = client.post("/cosmos/tx/v1beta1/txs", reqBody, ServiceOuterClass.BroadcastTxResponse.class);
+        ServiceOuterClass.BroadcastTxResponse broadcastTxResponse = client.post("/cosmos/tx/v1beta1/txs", reqBody,
+                ServiceOuterClass.BroadcastTxResponse.class);
         return broadcastTxResponse;
     }
 
@@ -148,7 +171,8 @@ public class CosmosRestApiClient {
         return latestBlock.getBlock().getHeader().getHeight();
     }
 
-    public TxOuterClass.Tx getTxRequest(CosmosCredentials payerCredentials, List<SendInfo> sendList, BigDecimal feeInAtom, long gasLimit) throws Exception {
+    public TxOuterClass.Tx getTxRequest(CosmosCredentials payerCredentials, List<SendInfo> sendList,
+            BigDecimal feeInAtom, long gasLimit) throws Exception {
         Map<String, Auth.BaseAccount> baseAccountCache = new HashMap<>();
         TxOuterClass.TxBody.Builder txBodyBuilder = TxOuterClass.TxBody.newBuilder();
         TxOuterClass.AuthInfo.Builder authInfoBuilder = TxOuterClass.AuthInfo.newBuilder();
@@ -231,7 +255,8 @@ public class CosmosRestApiClient {
      * @return 交易哈希
      * @throws Exception API 错误
      */
-    public Abci.TxResponse sendMultiTx(CosmosCredentials payerCredentials, List<SendInfo> sendList, BigDecimal feeInAtom, long gasLimit) throws Exception {
+    public Abci.TxResponse sendMultiTx(CosmosCredentials payerCredentials, List<SendInfo> sendList,
+            BigDecimal feeInAtom, long gasLimit) throws Exception {
         if (sendList == null || sendList.size() == 0) {
             throw new Exception("sendList is empty");
         }
@@ -250,7 +275,8 @@ public class CosmosRestApiClient {
         }
         Abci.TxResponse txResponse = broadcastTxResponse.getTxResponse();
         if (txResponse.getCode() != 0 || !StringUtil.isNullOrEmpty(txResponse.getCodespace())) {
-            throw new Exception("BroadcastTx error:" + txResponse.getCodespace() + "," + txResponse.getCode() + "," + txResponse.getRawLog() + "\n" + printer.print(tx));
+            throw new Exception("BroadcastTx error:" + txResponse.getCodespace() + "," + txResponse.getCode() + ","
+                    + txResponse.getRawLog() + "\n" + printer.print(tx));
         }
         if (txResponse.getTxhash().length() != 64) {
             throw new Exception("Txhash illegal\n" + printer.print(tx));
@@ -258,7 +284,8 @@ public class CosmosRestApiClient {
         return txResponse;
     }
 
-    public TxOuterClass.SignerInfo getSignInfo(CosmosCredentials credentials, Map<String, Auth.BaseAccount> baseAccountCache) throws Exception {
+    public TxOuterClass.SignerInfo getSignInfo(CosmosCredentials credentials,
+            Map<String, Auth.BaseAccount> baseAccountCache) throws Exception {
         byte[] encodedPubKey = credentials.getEcKey().getPubKeyPoint().getEncoded(true);
         Keys.PubKey pubKey = Keys.PubKey.newBuilder()
                 .setKey(ByteString.copyFrom(encodedPubKey))
@@ -276,13 +303,16 @@ public class CosmosRestApiClient {
         return signerInfo;
     }
 
-    public ByteString getSignBytes(CosmosCredentials credentials, TxOuterClass.TxBody txBody, TxOuterClass.AuthInfo authInfo, Map<String, Auth.BaseAccount> baseAccountCache) throws Exception {
+    public ByteString getSignBytes(CosmosCredentials credentials, TxOuterClass.TxBody txBody,
+            TxOuterClass.AuthInfo authInfo, Map<String, Auth.BaseAccount> baseAccountCache) throws Exception {
         Auth.BaseAccount baseAccount = queryBaseAccount(credentials.getAddress(), baseAccountCache);
-        byte[] sigBytes = signDoc(credentials.getEcKey().getPrivKeyBytes(), baseAccount, txBody, authInfo, this.chainId);
+        byte[] sigBytes = signDoc(credentials.getEcKey().getPrivKeyBytes(), baseAccount, txBody, authInfo,
+                this.chainId);
         return ByteString.copyFrom(sigBytes);
     }
 
-    public static byte[] signDoc(byte[] privateKey, Auth.BaseAccount baseAccount, TxOuterClass.TxBody txBody, TxOuterClass.AuthInfo authInfo, String chainId) {
+    public static byte[] signDoc(byte[] privateKey, Auth.BaseAccount baseAccount, TxOuterClass.TxBody txBody,
+            TxOuterClass.AuthInfo authInfo, String chainId) {
         ECKeyPair keyPair = ECKeyPair.create(privateKey);
         TxOuterClass.SignDoc signDoc = TxOuterClass.SignDoc.newBuilder()
                 .setBodyBytes(txBody.toByteString())
@@ -301,4 +331,21 @@ public class CosmosRestApiClient {
         System.arraycopy(array2, 0, joinedArray, array1.length, array2.length);
         return joinedArray;
     }
+
+    public MsgGridnodeDelegateResponse delegateTokens(MsgGridnodeDelegate request) {
+        ManagedChannel channel = createChannel("localhost", 50051);
+        MsgGrpc.MsgBlockingStub stub = createStub(channel);
+        MsgGridnodeDelegateResponse response = stub.delegateTokens(request);
+        channel.shutdown();
+        return response;
+    }
+
+    public MsgGridnodeUndelegateResponse undelegateTokens(MsgGridnodeUndelegate request) {
+        ManagedChannel channel = createChannel("localhost", 50051);
+        MsgGrpc.MsgBlockingStub stub = createStub(channel);
+        MsgGridnodeUndelegateResponse response = stub.undelegateTokens(request);
+        channel.shutdown();
+        return response;
+    }
+
 }
