@@ -1,6 +1,6 @@
-package com.jeongen.cosmos.vo;
+package org.unigrid.cosmos.vo;
 
-import com.jeongen.cosmos.crypro.CosmosCredentials;
+import org.unigrid.cosmos.crypto.CosmosCredentials;
 import lombok.Builder;
 import lombok.Data;
 

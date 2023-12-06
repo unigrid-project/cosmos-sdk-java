@@ -1,4 +1,4 @@
-package com.jeongen.cosmos.util;
+package org.unigrid.cosmos.util;
 
 import com.google.protobuf.util.JsonFormat;
 import cosmos.auth.v1beta1.Auth;

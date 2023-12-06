@@ -1,4 +1,4 @@
-package com.jeongen.cosmos;
+package org.unigrid.cosmos;
 
 import cosmos.bank.v1beta1.QueryGrpc;
 import cosmos.bank.v1beta1.QueryOuterClass;

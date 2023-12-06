@@ -1,4 +1,4 @@
-package com.jeongen.cosmos.vo;
+package org.unigrid.cosmos.vo;
 
 import cosmos.base.abci.v1beta1.Abci;
 import lombok.Builder;

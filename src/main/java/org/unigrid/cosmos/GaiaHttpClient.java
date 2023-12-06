@@ -1,9 +1,9 @@
-package com.jeongen.cosmos;
+package org.unigrid.cosmos;
 
 import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.Message;
 import com.google.protobuf.util.JsonFormat;
-import com.jeongen.cosmos.util.JsonToProtoObjectUtil;
+import org.unigrid.cosmos.util.JsonToProtoObjectUtil;
 import okhttp3.*;
 import org.apache.commons.collections4.MultiValuedMap;
 import org.slf4j.Logger;

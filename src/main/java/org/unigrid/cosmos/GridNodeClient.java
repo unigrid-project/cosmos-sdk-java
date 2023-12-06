@@ -1,4 +1,4 @@
-package com.jeongen.cosmos;
+package org.unigrid.cosmos;
 
 import unigrid.gridnode.MsgGrpc;
 import unigrid.gridnode.Tx.MsgGridnodeDelegate;

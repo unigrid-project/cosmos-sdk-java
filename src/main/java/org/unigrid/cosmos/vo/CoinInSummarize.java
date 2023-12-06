@@ -1,4 +1,4 @@
-package com.jeongen.cosmos.vo;
+package org.unigrid.cosmos.vo;
 
 import lombok.Data;
 

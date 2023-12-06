@@ -1,7 +1,8 @@
-package com.jeongen.cosmos;
+package org.unigrid.cosmos;
 
-import com.jeongen.cosmos.crypro.CosmosCredentials;
-import com.jeongen.cosmos.vo.SendInfo;
+import org.unigrid.cosmos.CosmosRestApiClient;
+import org.unigrid.cosmos.crypto.CosmosCredentials;
+import org.unigrid.cosmos.vo.SendInfo;
 import cosmos.base.abci.v1beta1.Abci;
 import cosmos.staking.v1beta1.MsgGrpc;
 import cosmos.staking.v1beta1.Tx.MsgDelegate;

@@ -1,6 +1,6 @@
-package com.jeongen.cosmos.util;
+package org.unigrid.cosmos.util;
 
-import com.jeongen.cosmos.crypro.CosmosCredentials;
+import org.unigrid.cosmos.crypto.CosmosCredentials;
 import io.netty.util.internal.StringUtil;
 import org.bitcoinj.core.Bech32;
 import org.bitcoinj.core.ECKey;

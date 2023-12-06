@@ -1,28 +1,31 @@
 # Cosmos SDK for Java
 
-The SDK integrates and implement all the functions required by the exchange to access Cosmos (ATOM). If you need additional support for other API, please submit an issue. 
-0.0.3 support Gaia v7.0.0, but not test yet. 
-- Scan chain
-- Address generation and verification
-- Transaction generation, signature, broadcast
-- Query tx detail
-- Query account detail
-- Query balance
-- Estimate gas
+[ENGLISH](./README_EN.md)  
+本SDK集成、实现了交易所接入 Cosmos(ATOM) 所需要的所有功能，如有其他接口需要新增支持，请提交issue. 
+0.0.3 已支持Gaia v7.0.0, 但未经测试
+- 扫链  
+- 地址生成、校验  
+- 交易生成、签名、广播  
+- 交易查询  
+- 账户查询  
+- 余额查询  
+- 估算gas  
 
-### Usage
+### 使用 
+https://search.maven.org/artifact/com.jeongen.cosmos/sdk 
 ```xml
 <dependency>
     <groupId>com.jeongen.cosmos</groupId>
     <artifactId>sdk</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
 </dependency>
 ```
 
-### Rest API
+### 对接 Rest API
 
 ```java
-import com.jeongen.cosmos.crypro.CosmosCredentials;
+
+import com.jeongen.cosmos.crypto.CosmosCredentials;
 import com.jeongen.cosmos.vo.SendInfo;
 import cosmos.base.abci.v1beta1.Abci;
 import junit.framework.TestCase;
@@ -67,7 +70,7 @@ public class CosmosRestApiClientTest extends TestCase {
 ```
 
 
-### gRPC
+### 对接 gRPC 
 ```java
 import cosmos.bank.v1beta1.QueryGrpc;
 import cosmos.bank.v1beta1.QueryOuterClass;

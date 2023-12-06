@@ -1,5 +1,6 @@
-package com.jeongen.cosmos;
+package org.unigrid.cosmos;
 
+import org.unigrid.cosmos.CosmosRestApiClient;
 import cosmos.staking.v1beta1.Tx.MsgDelegate;
 
 import java.math.BigDecimal;
@@ -7,8 +8,8 @@ import java.util.HashMap;
 
 import com.google.protobuf.Any;
 import com.google.protobuf.ByteString;
-import com.jeongen.cosmos.crypro.CosmosCredentials;
-import com.jeongen.cosmos.util.ATOMUnitUtil;
+import org.unigrid.cosmos.crypto.CosmosCredentials;
+import org.unigrid.cosmos.util.ATOMUnitUtil;
 
 import cosmos.base.v1beta1.CoinOuterClass.Coin;
 import cosmos.tx.v1beta1.ServiceOuterClass;

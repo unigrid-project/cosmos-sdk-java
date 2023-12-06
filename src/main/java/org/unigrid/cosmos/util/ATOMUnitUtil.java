@@ -1,4 +1,4 @@
-package com.jeongen.cosmos.util;
+package org.unigrid.cosmos.util;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

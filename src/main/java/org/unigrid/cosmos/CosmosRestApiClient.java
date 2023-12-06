@@ -1,12 +1,12 @@
-package com.jeongen.cosmos;
+package org.unigrid.cosmos;
 
 import com.google.protobuf.Any;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.util.JsonFormat;
-import com.jeongen.cosmos.crypro.CosmosCredentials;
-import com.jeongen.cosmos.util.ATOMUnitUtil;
-import com.jeongen.cosmos.util.JsonToProtoObjectUtil;
-import com.jeongen.cosmos.vo.SendInfo;
+import org.unigrid.cosmos.crypto.CosmosCredentials;
+import org.unigrid.cosmos.util.ATOMUnitUtil;
+import org.unigrid.cosmos.util.JsonToProtoObjectUtil;
+import org.unigrid.cosmos.vo.SendInfo;
 import cosmos.auth.v1beta1.Auth;
 import cosmos.auth.v1beta1.QueryOuterClass.QueryAccountResponse;
 import cosmos.bank.v1beta1.QueryOuterClass;
