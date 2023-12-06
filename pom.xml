@@ -123,7 +123,7 @@
     <repositories>
         <repository>
             <id>github</id>
-            <name>GitHub Unigrid Cosmos SDK Java Apache Maven Packages</name>
+            <name>Unigrid Cosmos SDK Java Apache Maven Packages</name>
             <url>https://maven.pkg.github.com/unigrid-project/cosmos-sdk-java</url>
         </repository>
     </repositories>
